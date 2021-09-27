@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MvcDbStokModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Kategori">
+    <Key>
+      <PropertyRef Name="Kategoriid" />
+    </Key>
+    <Property Name="Kategoriid" Type="smallint" Nullable="false" />
+    <Property Name="KategoriAd" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Müşteriler">
+    <Key>
+      <PropertyRef Name="Musteriid" />
+    </Key>
+    <Property Name="Musteriid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MusteriAd" Type="nvarchar" MaxLength="50" />
+    <Property Name="MusteriSoyAd" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Satış">
+    <Key>
+      <PropertyRef Name="Satısid" />
+    </Key>
+    <Property Name="Satısid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Urun" Type="int" />
+    <Property Name="Musteri" Type="int" />
+    <Property Name="Adet" Type="tinyint" />
+    <Property Name="Fiyat" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Ürünler">
+    <Key>
+      <PropertyRef Name="Urunid" />
+    </Key>
+    <Property Name="Urunid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UrunAd" Type="nvarchar" MaxLength="50" />
+    <Property Name="UrunKategori" Type="smallint" />
+    <Property Name="UrunFiyat" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Marka" Type="varchar" MaxLength="50" />
+    <Property Name="Stok" Type="tinyint" />
+  </EntityType>
+  <Association Name="FK_Satış_Müşteriler">
+    <End Role="Müşteriler" Type="Self.Müşteriler" Multiplicity="0..1" />
+    <End Role="Satış" Type="Self.Satış" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Müşteriler">
+        <PropertyRef Name="Musteriid" />
+      </Principal>
+      <Dependent Role="Satış">
+        <PropertyRef Name="Musteri" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Satış_Ürünler">
+    <End Role="Ürünler" Type="Self.Ürünler" Multiplicity="0..1" />
+    <End Role="Satış" Type="Self.Satış" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ürünler">
+        <PropertyRef Name="Urunid" />
+      </Principal>
+      <Dependent Role="Satış">
+        <PropertyRef Name="Urun" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Ürünler_Kategori">
+    <End Role="Kategori" Type="Self.Kategori" Multiplicity="0..1" />
+    <End Role="Ürünler" Type="Self.Ürünler" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Kategori">
+        <PropertyRef Name="Kategoriid" />
+      </Principal>
+      <Dependent Role="Ürünler">
+        <PropertyRef Name="UrunKategori" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MvcDbStokModelStoreContainer">
+    <EntitySet Name="Kategori" EntityType="Self.Kategori" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Müşteriler" EntityType="Self.Müşteriler" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Satış" EntityType="Self.Satış" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Ürünler" EntityType="Self.Ürünler" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Satış_Müşteriler" Association="Self.FK_Satış_Müşteriler">
+      <End Role="Müşteriler" EntitySet="Müşteriler" />
+      <End Role="Satış" EntitySet="Satış" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Satış_Ürünler" Association="Self.FK_Satış_Ürünler">
+      <End Role="Ürünler" EntitySet="Ürünler" />
+      <End Role="Satış" EntitySet="Satış" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Ürünler_Kategori" Association="Self.FK_Ürünler_Kategori">
+      <End Role="Kategori" EntitySet="Kategori" />
+      <End Role="Ürünler" EntitySet="Ürünler" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
